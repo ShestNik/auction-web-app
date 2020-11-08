@@ -3,14 +3,28 @@ from .timer import LotTimer
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import models
 
+class LotLogicException(Exception):
+    def __init__(self, text):
+        self.txt = text
+
 class LotLogic():
+	@staticmethod
+	def get_by_pk(pk: int):
+		try:
+			lot = Lot.objects.get(pk=pk)
+		except Lot.DoesNotExist:
+			raise LotLogicException('Lot does not exists')
+		else:
+			return lot
+
+	@staticmethod
+	def get_all():
+		return Lot.objects.all()
 
 	@staticmethod
 	def update_price(up_price: float, lot_id: int, user_id: int):
-		print(user_id)
 		lt = LotTimer()
 		lt.stop(lot_id)
-		print(lot_id)
 		lot_inst = get_object_or_404(Lot, pk = lot_id)
 		if(lot_inst.cur_price):
 			lot_inst.cur_price += up_price

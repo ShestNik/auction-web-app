@@ -20,3 +20,7 @@ class UserLogic():
 		my_password = password
 		user = authenticate(username=user.username, password=my_password)
 		login(request, user)
+	
+	@staticmethod
+	def get_by_name(username):
+		return models.User.objects.get(username=request.user)

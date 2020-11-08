@@ -18,8 +18,9 @@ from django.views import generic
 from django.forms import ModelChoiceField	
 from .timer import LotTimer
 from django.urls import reverse_lazy
-from .lot_logic import LotLogic
+from .lot_logic import LotLogic, LotLogicException
 from .user_logic import UserLogic
+from django.http import Http404
 
 class UpPriceForm(forms.Form):
 	up_price = forms.FloatField(min_value=0.01)
@@ -68,22 +69,22 @@ class CreateLotFormView(ModelForm):
 
 def index(request):
 	if request.method == 'POST':
-		lots = Lot.objects.all()
+		lots = LotLogic.get_all()
 		form = CreateLotFormView(request.POST)
 		if form.is_valid():
 			LotLogic.create_lot(form.cleaned_data, request.user)
 			return render(request, 'auction/lot_list.html', {'lots': lots, 'form': CreateLotFormView()})
 			
 	if request.method == 'GET':
-		lots = Lot.objects.all()
+		lots = LotLogic.get_all()
 		form = CreateLotFormView()
 		return render(request, 'auction/lot_list.html', {'lots': lots, 'form': form})
 
 @login_required	
 def lot_detail_view(request,pk):
 	try:
-		lot=Lot.objects.get(pk=pk)
-	except Lot.DoesNotExist:
+		lot=LotLogic.get_by_pk(pk)
+	except LotLogicException:
 		raise Http404("Lot does not exist")
 	email = None
 	
@@ -95,7 +96,7 @@ def lot_detail_view(request,pk):
 	else:
 		form = UpPriceForm(request.POST)
 		if lot.is_sold:
-			customer = models.User.objects.get(username=request.user)
+			customer = UserLogic.get_by_name(request.user)
 			email = customer.email
 	return render(
 		request,
