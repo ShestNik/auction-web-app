@@ -23,17 +23,25 @@ class LotLogic():
 
 	@staticmethod
 	def update_price(up_price: float, lot_id: int, user_id: int):
-		lt = LotTimer()
-		lt.stop(lot_id)
-		lot_inst = get_object_or_404(Lot, pk = lot_id)
-		if(lot_inst.cur_price):
-			lot_inst.cur_price += up_price
-		else:
-			lot_inst.cur_price = lot_inst.start_price + up_price
-		lot_inst.cur_customer_id = models.User.objects.get(pk=user_id)
-		lot_inst.save()
-		lt.start(lot_id)
-
+		try:
+			lot_inst = get_object_or_404(Lot, pk = lot_id)
+		except Exception:
+			raise LotLogicException("Objectwith pk=" +str(pk) +  "does not exist!")
+		print(lot_inst.is_sold, lot_inst.dj_owner_id != user_id)
+		if not lot_inst.is_sold and lot_inst.dj_owner_id != user_id:
+			lt = LotTimer()
+			lt.stop(lot_id)
+			if(lot_inst.cur_price):
+				lot_inst.cur_price += up_price
+			else:
+				lot_inst.cur_price = lot_inst.start_price + up_price
+			lot_inst.cur_customer_id = models.User.objects.get(pk=user_id)
+			lot_inst.save()
+			lt.start(lot_id)
+		elif lot_inst.is_sold:
+			raise LotLogicException("Lot is Already sold!")
+		elif lot_inst.dj_owner_id == user_id:
+			raise LotLogicException("You can't buy your own lot!")
 	@staticmethod
 	def create_lot(form_data: dict, user):
 		name = form_data['name']
@@ -45,3 +53,4 @@ class LotLogic():
 		new_lot = Lot(name=name, start_price=start_price, timer=timer, category_id=category_id, dj_owner_id = dj_owner_id)
 		print(new_lot.timer)
 		new_lot.save()
+		return new_lot

@@ -22,5 +22,5 @@ class UserLogic():
 		login(request, user)
 	
 	@staticmethod
-	def get_by_name(username):
-		return models.User.objects.get(username=request.user)
+	def get_by_name(user):
+		return models.User.objects.get(username=user)
