@@ -26,8 +26,10 @@ class LotLogic():
 		try:
 			lot_inst = get_object_or_404(Lot, pk = lot_id)
 		except Exception:
-			raise LotLogicException("Objectwith pk=" +str(pk) +  "does not exist!")
-		print(lot_inst.is_sold, lot_inst.dj_owner_id != user_id)
+			raise LotLogicException("Objectwith pk=" +str(lot_id) +  "does not exist!")
+		if up_price <= 0:
+			raise LotLogicException("Up_price should be positive")
+		#print(lot_inst.is_sold, lot_inst.dj_owner_id != user_id)
 		if not lot_inst.is_sold and lot_inst.dj_owner_id != user_id:
 			lt = LotTimer()
 			lt.stop(lot_id)
@@ -42,6 +44,7 @@ class LotLogic():
 			raise LotLogicException("Lot is Already sold!")
 		elif lot_inst.dj_owner_id == user_id:
 			raise LotLogicException("You can't buy your own lot!")
+
 	@staticmethod
 	def create_lot(form_data: dict, user):
 		name = form_data['name']

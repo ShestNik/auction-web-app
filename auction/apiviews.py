@@ -22,50 +22,24 @@ from django.http import JsonResponse
 from rest_framework import generics, permissions, viewsets, mixins
 from rest_framework.response import Response
 
-class CategoryApiView(viewsets.ModelViewSet):
+class CategoryApiView(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
     def get_permissions(self):
-        if self.action == 'list':
+        if self.action == 'list' or self.action == 'retrieve':
             permission_classes = [permissions.IsAuthenticated]
         else:
             permission_classes = [permissions.IsAdminUser]
         return [permission() for permission in permission_classes]
 
-class ProfileApiView(viewsets.ModelViewSet):
-    serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
-    def get_permissions(self):
-        if self.action == 'list' or self.action == 'retrieve':
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = []
-        return [permission() for permission in permission_classes]
 
-class LotApiView(viewsets.ModelViewSet):
+class LotDetailApiView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin):
     queryset = LotLogic.get_all()
     serializer_class = LotSerializer
-    def perform_create(self, serializer):
-        serializer.save(dj_owner_id=self.request.user)
 
-class LotDetailApiView(viewsets.ViewSet):
-    queryset = LotLogic.get_all()
-    serializer_class = LotSerializer
-    def list(self, request):
-        serializer = LotSerializer(self.queryset, many=True)
-        return Response(serializer.data)
-
-    def create(self, request):
-        serializer = LotSerializer(data = request.data)
-        if serializer.is_valid():
-            serializer.save(dj_owner_id=request.user)
-            return Response(serializer.data)
-        else:
-            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-    
     def partial_update(self, request, pk=None):
         queryset = LotLogic.get_by_pk(pk)
-        print(request.data)
+        #print(request.data)
         response_data = ""
         try:
             LotLogic.update_price(float(request.data["up_price"]), pk, request.user.id)
@@ -79,10 +53,11 @@ class LotDetailApiView(viewsets.ViewSet):
             status_code = status.HTTP_200_OK
         finally:
             return Response(response_data, status = status_code)
-    #def retrieve(self, request, pk=None):
-    #    print('hi')
-    #    queryset = LotLogic.get_by_pk(pk)
-    #    return LotLogic.get_by_pk(pk)
+
+    def get_permissions(self):
+        permission_classes = [permissions.IsAuthenticated]
+        return [permission() for permission in permission_classes]
+
     #def patch(self, request, pk):
     #    testmodel_object = self.get_object(pk)
     #    serializer = TestModelSerializer(testmodel_object, data=request.data, partial=True) # set partial=True to update a data partially
