@@ -1,0 +1,28 @@
+<html>
+    <head>
+        <title>Сервис для аукционов</title>
+    </head>
+    <body>
+        <div><h1>Лот-{{ lot.name }}</h1></div>
+		{% if not lot.is_sold %}
+		   	<div> Начальная цена - {{ lot.start_price }}</div>
+		    {% if lot.cur_price %}
+				  <div> Текущая цена - {{ lot.cur_price }}</div>
+			{% endif %} 
+			<div>
+			    <form action="" method="post">
+					{% csrf_token %}
+				    <table>
+				    {{ form }}
+				    </table>
+	   				<input type="submit" value="Ок" />
+				</form> 
+			</div>
+		{% elif user == lot.dj_owner_id %}
+			<div><h1>Ваш лот был продан!</h1></div>
+			 <div><h1>email купившего - {{ email }} </h1></div>
+		{% else %}
+			<div><h1> Лот был продан! </h1></div>
+		{% endif %}
+    </body>
+</html>
