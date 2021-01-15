@@ -29,14 +29,14 @@ class LotLogic():
 		if up_price <= 0:
 			raise LotLogicException("Up_price should be positive")
 		#print(lot_inst.sold)
-		if not lot_inst.is_sold() and not lot_inst.is_owner(user_id):
+		if not lot_inst.check_sold() and not lot_inst.is_owner(user_id):
 			lt = auction.timer.LotTimer()
 			lt.stop(lot_id)
 			lot_inst.up_price(up_price)
 			lot_inst.update_customer(user_id)
 			lot_inst.save()
 			lt.start(lot_id)
-		elif lot_inst.is_sold():
+		elif lot_inst.check_sold():
 			#print(lot_inst.is_sold())
 			raise LotLogicException("Lot is Already sold!")
 		elif lot_inst.is_owner(user_id):

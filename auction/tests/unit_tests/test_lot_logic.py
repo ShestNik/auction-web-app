@@ -58,7 +58,7 @@ class LotLogicTest(TestCase):
         user_id = -1
         lot = MockLot()
         MockLot.get.return_value = auction.models.Lot()
-        lot.is_sold.return_value = False
+        lot.check_sold.return_value = False
         lot.is_owner.return_value = True
         e = LotLogicException("")
 
@@ -77,7 +77,7 @@ class LotLogicTest(TestCase):
         lot = MockLot()
         timer = MockTimer()
         MockLot.get.return_value = auction.models.Lot()
-        lot.is_sold.return_value = False
+        lot.check_sold.return_value = False
         lot.is_owner.return_value = False
         lot.get.return_value = auction.models.Lot()
         

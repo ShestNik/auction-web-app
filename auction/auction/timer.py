@@ -20,6 +20,8 @@ class LotTimer(metaclass=Singleton):
 			timer.start()
 
 	def stop(self, lot_id):
-		timer = self.timers[lot_id]
-		#print(self.timers[lot_id])
-		timer.cancel()
+		try:
+			timer = self.timers[lot_id]
+			timer.cancel()
+		except KeyError:
+			pass

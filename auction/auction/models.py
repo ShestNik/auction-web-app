@@ -79,7 +79,7 @@ class Lot(models.Model):
 	def update_customer(self, user_id):
 		self.cur_customer_id = m.User.objects.get(pk=user_id)
 	
-	def sold(self):
+	def check_sold(self):
 		return self.is_sold
 	
 	def is_owner(self, user_id):

@@ -1,7 +1,7 @@
 from django.test import Client, TestCase
+from django.db import connections
 import sys
 import os
-import unittest
 import django
 sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction')
 sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction/auction')
@@ -15,6 +15,7 @@ import time
 import auction.models
 from auction.lot_logic import LotLogic, LotLogicException
 from unittest.mock import patch
+from django.db import connections
 
 class TestException(Exception):
     def __init__(self, text):
@@ -28,14 +29,29 @@ class TimerLotIntegrationTest(TestCase):
         User.objects.create_user(username='jack',
                                  email='john@john.com',
                                  password='aaaa')
-        record = auction.models.Lot(name = 'test_1', start_price = 1, timer = 0)
+        record = auction.models.Lot(name = 'test_auct', start_price = 1, timer = 0)
         record.save()
-        record = auction.models.Lot(name = 'test_2', start_price = 1, timer = 2)
+        record = auction.models.Lot(name = 'test_auct2', start_price = 1, timer = 2)
         record.save()
+        print(django.contrib.auth.models.User.objects.all())
 
     def test_start(self):
-        
+        record = auction.models.Lot.objects.get(name='test_auct')
+        timer = auction.timer.LotTimer()
+        timer.start(record.id)
+        record.refresh_from_db()
+        self.assertEqual(record.is_sold, False)
 
+    def test_stop(self):
+        record = auction.models.Lot.objects.get(name='test_auct2')
+        timer = auction.timer.LotTimer()
+        
+        timer.start(record.id)
+        timer.stop(record.id)
+        
+        record.refresh_from_db()
+        self.assertEqual(record.is_sold, False)
+    
 
 if __name__ == "__main__":
     unittest.main()
