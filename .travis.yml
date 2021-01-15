@@ -13,6 +13,6 @@ before_script:
 script:
   - python3 manage.py test tests/e2e_tests
   - python3 manage.py test tests/unit_tests
-  - python3 manage.py test tests/integration_tests
+#  - python3 manage.py test tests/integration_tests
 services:
   - postgresql

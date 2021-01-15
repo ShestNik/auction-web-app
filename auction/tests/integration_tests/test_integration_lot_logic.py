@@ -40,10 +40,10 @@ class TimerLotIntegrationTest(TestCase):
         record = auction.models.Lot.objects.get(name='test_auct_logic')
         user = User.objects.get(username='john')
 
-        #LotLogic.update_price(1, record.id, user.id)
-        #time.sleep(0.1)
-        #record.refresh_from_db()
-        #print(record.cur_price, record.is_sold)
+        LotLogic.update_price(1, record.id, user.id)
+        time.sleep(0.1)
+        record.refresh_from_db()
+        print(record.cur_price, record.is_sold)
 
         self.assertEqual(record.cur_price, None)
 

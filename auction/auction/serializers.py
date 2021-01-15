@@ -21,6 +21,6 @@ class LotSerializer(serializers.ModelSerializer):
 class LotDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lot
-        fields = ('name', 'start_price', 'is_sold', 'category_id', 'cur_price')
-        read_only_fields = ('name', 'start_price', 'is_sold', 'category_id')
+        fields = ('name', 'start_price', 'timer', 'is_sold', 'category_id', 'cur_price')
+        read_only_fields = ('is_sold',)
     #def 
