@@ -22,6 +22,4 @@ deploy:
   file: "test_log.txt"
   skip_cleanup: true
   on:
-    tags: true
-addons:
-  artifacts: true
+    tags: false
