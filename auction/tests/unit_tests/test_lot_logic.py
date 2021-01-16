@@ -3,8 +3,6 @@ import os
 import unittest
 import django
 from django.test import Client, TestCase
-sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction')
-sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction/auction')
 #print(sys.path)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kursach.settings")
 import settings

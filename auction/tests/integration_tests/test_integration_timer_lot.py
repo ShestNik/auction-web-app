@@ -34,7 +34,6 @@ class TimerLotIntegrationTest(TestCase):
         record.save()
         record = auction.models.Lot(name = 'test_auct2', start_price = 1, timer = 2)
         record.save()
-        print(django.contrib.auth.models.User.objects.all())
 
     def test_start(self):
         record = auction.models.Lot.objects.get(name='test_auct')
