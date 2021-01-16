@@ -18,7 +18,7 @@ services:
   - postgresql
 deploy:
   provider: releases
-  api_key: "17c9c67f67db7ba2dcd8dbf3f579accf70b7e15f"
+  api_key: "4b08838c45cc19778b634e1415cdb09e566a9e53"
   file: "test_log.txt"
   skip_cleanup: true
   on:
