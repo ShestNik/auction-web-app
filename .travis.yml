@@ -11,9 +11,9 @@ before_script:
   - python3 manage.py makemigrations
   - python3 manage.py migrate
 script:
-  - python3 manage.py test tests/unit_tests > test_log.txt
-  - python3 manage.py test tests/integration_tests > test_log.txt
-  - python3 manage.py test tests/e2e_tests > test_log.txt
+  - python3 manage.py test tests/unit_tests > out.txt 2> err_unit.txt
+  - python3 manage.py test tests/integration_tests > out.txt 2> err_integration.txt
+  - python3 manage.py test tests/e2e_tests > out.txt 2> err_e2e.txt
 services:
   - postgresql
 deploy:

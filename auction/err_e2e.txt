@@ -1,0 +1,7 @@
+Creating test database for alias 'default'...
+.
+----------------------------------------------------------------------
+Ran 1 test in 11.817s
+
+OK
+Destroying test database for alias 'default'...
