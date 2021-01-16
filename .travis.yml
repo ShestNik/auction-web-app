@@ -16,9 +16,10 @@ script:
   - python3 manage.py test tests/e2e_tests 
 services:
   - postgresql
-env:
-  ARTIFACTS_KEY=(AWS access key id)
-  ARTIFACTS_SECRET=(AWS secret access key)
-  ARTIFACTS_BUCKET=(S3 bucket name)
+deploy:
+  provider: s3
+  access_key_id: "YOUR AWS ACCESS KEY"
+  secret_access_key: "YOUR AWS SECRET KEY"
+  bucket: "S3 Bucket"
 addons:
   artifacts: true
