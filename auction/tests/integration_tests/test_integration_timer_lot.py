@@ -1,6 +1,7 @@
 from django.test import Client, TestCase
 from django.db import connections
 import sys
+import threading
 import os
 import django
 sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction')
@@ -23,10 +24,10 @@ class TestException(Exception):
 
 class TimerLotIntegrationTest(TestCase):
     def setUp(self):
-        User.objects.create_user(username='john',
+        User.objects.create_user(id=1, username='john',
                                  email='john@john.com',
                                  password='aaaa')
-        User.objects.create_user(username='jack',
+        User.objects.create_user(id=2,username='jack',
                                  email='john@john.com',
                                  password='aaaa')
         record = auction.models.Lot(name = 'test_auct', start_price = 1, timer = 0)
@@ -39,6 +40,7 @@ class TimerLotIntegrationTest(TestCase):
         record = auction.models.Lot.objects.get(name='test_auct')
         timer = auction.timer.LotTimer()
         timer.start(record.id)
+        time.sleep(0.1)
         record.refresh_from_db()
         self.assertEqual(record.is_sold, False)
 
@@ -51,7 +53,8 @@ class TimerLotIntegrationTest(TestCase):
         
         record.refresh_from_db()
         self.assertEqual(record.is_sold, False)
-    
+        print(threading.active_count())
+        
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,4 @@
-from django.test import Client, TestCase
+from django.test import Client, TestCase, TransactionTestCase
 import sys
 import os
 import django
@@ -13,6 +13,7 @@ from django.contrib.auth.models import User
 import auction.timer
 import time
 import auction.models
+import threading
 from auction.lot_logic import LotLogic, LotLogicException
 from unittest.mock import patch
 
@@ -20,33 +21,32 @@ class TestException(Exception):
     def __init__(self, text):
         self.txt = text
 
-class TimerLotIntegrationTest(TestCase):
+class TimerLotIntegrationTest(TransactionTestCase):
     def setUp(self):
-        user = User.objects.create_user(username='john',
+        user = User.objects.create_user(id=1,username='joh',
                                  email='john@john.com',
                                  password='aaaa')
         #user.save()
-        user = User.objects.create_user(username='jack',
+        user = User.objects.create_user(id=2,username='jac',
                                  email='john@john.com',
                                  password='aaaa')
         #user.save()
         record = auction.models.Lot(name = 'test_auct_logic', start_price = 1, timer = 0)
-        print(record.id)
+        #print(record.id)
         record.save()
         record = auction.models.Lot(name = 'test_auct2_logic', start_price = 1, timer = 2)
         record.save()
 
     def test_make_bet(self):
         record = auction.models.Lot.objects.get(name='test_auct_logic')
-        user = User.objects.get(username='john')
+        user = User.objects.get(username='joh')
 
         LotLogic.update_price(1, record.id, user.id)
         time.sleep(0.1)
         record.refresh_from_db()
-        print(record.cur_price, record.is_sold)
 
-        self.assertEqual(record.cur_price, None)
-
+        self.assertEqual(record.cur_price, 2)
+        #print(threading.active_count())
 
 if __name__ == "__main__":
     unittest.main()

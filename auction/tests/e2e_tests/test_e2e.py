@@ -28,33 +28,31 @@ class EndToToEnd(TestCase):
         category.save()
 
     def test_create_post(self):
-        for _ in range(100):
+        for i in range(100):
             user_data = {
                     'username': 'name', 
                     'email': 'name@name.ru', 
-                    'password1': 'aA1!password', 
+                    'password': 'aA1!password', 
                 }
 
             lot_data = {
-                'name': 'test_lot', 
+                'name': 'e2e_test', 
                 'start_price': 1,
                 'timer': 1, 
                 'category_id': 1,
             }
-            login = self.client.login(username= 'name',password='aA1!password', )
-            self.assertTrue(login)
+
             #print(login)
             response = self.client.post('/api/v1/api-auth/login', data=user_data, follow=True)
-            #print(response.content)
-            #print(response)
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(django.contrib.auth.models.User.objects.get(username='name').email, 'name@name.ru')
+            login = self.client.login(username= user_data['username'],password=user_data['password'], )
+            self.assertTrue(login)
+            self.assertEqual(django.contrib.auth.models.User.objects.get(username=user_data['username']).email, user_data['email'])
 
-            response = self.client.post('/api/v1/lots', data=lot_data, follow=True)
-            #print(response.content)
-            self.assertEqual(response.status_code, 200)
-            #print(auction.models.Lot.objects.all())
-
+            response = self.client.post('/api/v1/lots/', data=lot_data)
+            self.assertEqual(response.status_code, 201)
+            lot = auction.models.Lot.objects.get(pk=i+1)
+            self.assertEqual(lot.start_price, lot_data['start_price'])
             self.ok += 1
 
     def tearDown(self):
