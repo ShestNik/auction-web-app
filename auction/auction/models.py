@@ -62,7 +62,7 @@ class Lot(models.Model):
 		#print('set_sold\n')
 		self.is_sold  = True
 		self.save()
-		connection.close()
+		
 
 	def is_already_sold(self, user):
 		#print(user, self.dj_owner_id, self.sold == True)
