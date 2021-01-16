@@ -11,8 +11,10 @@ before_script:
   - python3 manage.py makemigrations
   - python3 manage.py migrate
 script:
-  - python3 manage.py test tests/unit_tests  > test_log.log
-  - python3 manage.py test tests/integration_tests > test_log.log
-  - python3 manage.py test tests/e2e_tests > test_log.log
+  - python3 manage.py test tests/unit_tests 
+  - python3 manage.py test tests/integration_tests 
+  - python3 manage.py test tests/e2e_tests 
 services:
   - postgresql
+addons:
+  artifacts: true
