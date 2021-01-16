@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.6"
+before_install:
+  - cd code/auction
+install:
+  - pip3 install -r requirements.txt
+script:
+  - python3 manage.py test tests/e2e_tests
+  - python3 manage.py test tests/unit_tests
+services:
+  - postgresql

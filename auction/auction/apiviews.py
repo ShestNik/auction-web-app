@@ -33,7 +33,7 @@ class CategoryApiView(mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins
         return [permission() for permission in permission_classes]
 
 
-class LotDetailApiView(viewsets.GenericViewSet, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin):
+class LotDetailApiView(viewsets.GenericViewSet, mixins.RetrieveModelMixin, mixins.ListModelMixin):
     queryset = LotLogic.get_all()
     serializer_class = LotSerializer
 

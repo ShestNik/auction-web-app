@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib.auth import models	as m
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from django.db import connection
 
 class Profile(models.Model):
 	id = models.AutoField(primary_key=True)
@@ -61,6 +62,7 @@ class Lot(models.Model):
 		#print('set_sold\n')
 		self.is_sold  = True
 		self.save()
+		
 
 	def is_already_sold(self, user):
 		#print(user, self.dj_owner_id, self.sold == True)
@@ -79,7 +81,7 @@ class Lot(models.Model):
 	def update_customer(self, user_id):
 		self.cur_customer_id = m.User.objects.get(pk=user_id)
 	
-	def sold(self):
+	def check_sold(self):
 		return self.is_sold
 	
 	def is_owner(self, user_id):

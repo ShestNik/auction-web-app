@@ -3,8 +3,6 @@ import os
 import unittest
 import django
 from django.test import Client, TestCase
-sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction')
-sys.path.append('/home/kolya/BAUMANKA/7/test and debug/code/auction/auction')
 #print(sys.path)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "kursach.settings")
 import settings
@@ -58,7 +56,7 @@ class LotLogicTest(TestCase):
         user_id = -1
         lot = MockLot()
         MockLot.get.return_value = auction.models.Lot()
-        lot.is_sold.return_value = False
+        lot.check_sold.return_value = False
         lot.is_owner.return_value = True
         e = LotLogicException("")
 
@@ -77,7 +75,7 @@ class LotLogicTest(TestCase):
         lot = MockLot()
         timer = MockTimer()
         MockLot.get.return_value = auction.models.Lot()
-        lot.is_sold.return_value = False
+        lot.check_sold.return_value = False
         lot.is_owner.return_value = False
         lot.get.return_value = auction.models.Lot()
         

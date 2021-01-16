@@ -39,17 +39,6 @@ class TimerTest(TestCase):
         mock_timer.start.assert_called_once()
 
     @patch('threading.Timer')
-    def test_stop_error(self, MockTimer):
-        t = auction.timer.LotTimer()
-
-        try:
-            t.stop(-1)
-        except KeyError:
-            pass
-        else:
-            raise TestException("KeyError didnt happen")
-
-    @patch('threading.Timer')
     def test_stop_ok(self, MockTimer):
         mock_timer = MockTimer()
         t = auction.timer.LotTimer()

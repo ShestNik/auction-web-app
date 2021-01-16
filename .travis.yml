@@ -1,0 +1,25 @@
+language: python
+python:
+  - "3.6"
+before_install:
+  - cd auction
+install:
+  - pip3 install -r requirements.txt
+  - psql -c '\x' -c "CREATE ROLE django WITH SUPERUSER PASSWORD 'django' LOGIN;"
+  - psql -c '\x' -c "CREATE DATABASE db_kurs OWNER django;"
+before_script:
+  - python3 manage.py makemigrations
+  - python3 manage.py migrate
+script:
+  - python3 manage.py test tests/unit_tests > test_log.txt
+  - python3 manage.py test tests/integration_tests > test_log.txt
+  - python3 manage.py test tests/e2e_tests > test_log.txt
+services:
+  - postgresql
+deploy:
+  provider: releases
+  api_key: "17c9c67f67db7ba2dcd8dbf3f579accf70b7e15f"
+  file: "test_log.txt"
+  skip_cleanup: true
+  on:
+    tags: false

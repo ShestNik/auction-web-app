@@ -26,7 +26,7 @@ urlpatterns = [
    path('api/v1/api-token-refresh/', refresh_jwt_token),
    path('api/v1/api-token-verify/', verify_jwt_token),
    path('api/v1/api-auth/', include('rest_framework.urls')),
-   path('api/v1/register', include('rest_registration.api.urls')),
+   path('api/v1/register/', include('rest_registration.api.urls')),
    path('api/v1', include(router.urls)),
    path('legacy/', include(legacyurls)),
 ]
