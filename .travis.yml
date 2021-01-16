@@ -19,7 +19,7 @@ services:
 deploy:
   provider: releases
   api_key: 951dfde7cdf71041c6c568b7e2e57cb9e7df860a
-  file: "test_log.txt"
+  file: "err_unit.txt" "err_integration.txt" "err_e2e.txt"
   skip_cleanup: true
   on:
     tags: false
