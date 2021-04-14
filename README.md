@@ -13,5 +13,8 @@
 ## ER диаграмма: 
 ![alt text](project_docs/ER.jpg "ER диаграмма проекта")
 
+## Ссылка на документацию в Swagger:
+https://app.swaggerhub.com/apis/Web_labs/web/1.0.0
+
 ## Ссылка на макет (ЛР 2)
 https://www.figma.com/file/D110fWl3zl21dXPGDaOvs8/Untitled?node-id=2%3A3
